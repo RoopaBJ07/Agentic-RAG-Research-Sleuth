@@ -1,0 +1,20 @@
+# Core AI Framework
+langchain
+langchain-openai
+langchain-community
+langchain-core
+
+# Academic Search Tools
+arxiv
+semantic-scholar
+
+# Multimodal & PDF Processing
+unstructured[pdf]
+poppler-utils
+pytesseract
+pypdf
+pdf2image
+
+# Environment & Data
+python-dotenv
+pydantic>=2.0.0

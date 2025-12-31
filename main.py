@@ -8,26 +8,23 @@ from schemas import PaperDetails
 from tools import get_academic_tools
 from prompts import get_academic_prompt
 
-# 1. Load Environment Variables (API Keys)
+# Load Environment Variables (API Keys)
 load_dotenv() 
 
 def run_academic_agent(user_query: str):
-    # 2. Initialize the LLM
-    # We use temperature 0 for extraction tasks to ensure accuracy
+    #  Initialize the LLM
     llm = ChatOpenAI(model="gpt-4o", temperature=0)
 
-    # 3. Load our custom toolkit
+    # Load our custom toolkit
     tools = get_academic_tools()
 
-    # 4. Initialize the Brain (Prompt)
+    # Initialize the Brain (Prompt)
     prompt = get_academic_prompt()
 
-    # 5. Build the Agent
-    # This creates the logic that decides which tool to use
+    # Build the Agent
     agent = create_openai_tools_agent(llm, tools, prompt)
 
     # 6. Initialize the Executor
-    # 'verbose=True' is great for interviews so you can show the 'thinking' process
     agent_executor = AgentExecutor(
         agent=agent, 
         tools=tools, 
@@ -35,14 +32,10 @@ def run_academic_agent(user_query: str):
         handle_parsing_errors=True
     )
 
-    # 7. Execute and Force Structured Output
-    # We tell the agent to take its final answer and fit it into our PaperDetails schema
+    # Execute and Force Structured Output
     print(f"--- Processing Query: {user_query} ---")
     
-    # First, the agent does its research
     raw_response = agent_executor.invoke({"input": user_query})
-    
-    # Second, we use the LLM to format the research into our Pydantic schema
     structured_llm = llm.with_structured_output(PaperDetails)
     final_output = structured_llm.invoke(raw_response["output"])
     
