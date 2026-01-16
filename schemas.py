@@ -17,7 +17,7 @@ class PaperDetails(BaseModel):
     
     # --- 1. Identification & Metadata ---
     title: str = Field(..., description="The full official title of the research paper")
-    authors: List[str] = Field(..., description="A clean list of all authors")
+    authors: List[str] = Field(default_factory=list, description="A clean list of all authors")
     publication_year: Optional[int] = Field(None, description="The year the paper was published")
     arxiv_id: str = Field(..., description="The unique ArXiv identifier (e.g., '1706.03762')")
     code_repository: Optional[str] = Field(None, description="The GitHub or official code link if mentioned")

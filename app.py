@@ -23,13 +23,16 @@ if query:
         try:
             # Call your main agent function
             result = run_academic_agent(query)
+            print(type(result))
             
             # 4. Display Results in Columns
             col1, col2 = st.columns([2, 1])
 
             with col1:
-                st.header(result.title)
-                st.subheader(f"Authors: {', '.join(result.authors)} ({result.publication_year})")
+                st.header(result.title if hasattr(result, "title") else result.get("title", "Unknown Title"))
+                authors = ", ".join(result.authors) if result.authors else "Not extracted"
+                year = result.publication_year if result.publication_year else "Year unknown"
+                st.subheader(f"Authors: {authors} ({year})")
                 
                 st.markdown("### 📝 Abstract")
                 st.write(result.abstract)
@@ -38,7 +41,23 @@ if query:
                 st.info(result.methodology)
                 
                 st.markdown("### 🔢 Mathematical Basis")
-                st.latex(result.mathematical_basis)
+                math_text = result.mathematical_basis
+
+                if math_text and "EQUATIONS:" in math_text:
+                    equations, explanation = math_text.split("EXPLANATION:", 1)
+
+                    equations = equations.replace("EQUATIONS:", "").strip()
+                    explanation = explanation.strip()
+
+                    if equations:
+                        st.latex(equations)
+
+                    if explanation:
+                        st.markdown("**Explanation**")
+                        st.write(explanation)
+                else:
+                    st.write("No explicit mathematical formulation detected.")
+
 
             with col2:
                 st.markdown("### 🎯 Problem & Goal")

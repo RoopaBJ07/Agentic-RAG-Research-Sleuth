@@ -1,12 +1,12 @@
 # Core AI Framework
-langchain
-langchain-openai
+langchain==0.1.16
+langchain-openai==0.0.8
 langchain-community
 langchain-core
 
 # Academic Search Tools
 arxiv
-semantic-scholar
+semanticscholar
 
 # Multimodal & PDF Processing
 unstructured[pdf]
